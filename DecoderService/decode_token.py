@@ -2,6 +2,7 @@ from fastapi import Depends, HTTPException, status, Response
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from firebase_admin import auth
 
+
 def decode_token(res: Response, cred: HTTPAuthorizationCredentials):
     if cred is None:
         raise HTTPException(
@@ -19,4 +20,3 @@ def decode_token(res: Response, cred: HTTPAuthorizationCredentials):
             detail=f"Invalid authentication credentials. {err}",
             headers={'WWW-Authenticate': 'Bearer error="invalid_token"'},
         )
-
