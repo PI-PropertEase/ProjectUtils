@@ -1,6 +1,6 @@
 from enum import StrEnum
 from time import time
-import json
+from ProjectUtils.MessagingService.user_schemas import UserBase
 
 
 class BaseType(StrEnum):
@@ -18,9 +18,9 @@ class UserType(BaseType):
 
 
 class UserMessage(BaseMessage):
-    def __init__(self, user_type: UserType, email: str):
-        self.user_type = user_type
-        self.body = {"email": email}
+    def __init__(self, message_type: UserType, user: UserBase):
+        self.message_type = message_type
+        self.body = user.model_dump()
 
 
 class PropertyType(BaseType):
@@ -30,8 +30,8 @@ class PropertyType(BaseType):
 
 
 class PropertyMessage(BaseMessage):
-    def __init__(self, property_type: PropertyType):
-        self.property_type = property_type
+    def __init__(self, message_type: PropertyType):
+        self.message_type = message_type
         self.body = {}
         # TODO : continue body
 
