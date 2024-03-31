@@ -15,7 +15,7 @@ channel.queue_bind(queue=created_users.method.queue, exchange=EXCHANGE_NAME)
 w2a_channel = connection.channel()
 API_EXCHANGE = "apis"
 w2a_channel.exchange_declare(
-    exchange=EXCHANGE_NAME, exchange_type="fanout", durable=True
+    exchange=API_EXCHANGE, exchange_type="fanout", durable=True
 )
 WRAPPER_TO_APP_QUEUE = "apis"
 apis = w2a_channel.queue_declare(queue=WRAPPER_TO_APP_QUEUE, durable=True)
