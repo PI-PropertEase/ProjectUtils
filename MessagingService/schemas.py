@@ -17,6 +17,9 @@ class MessageType(StrEnum):
     PROPERTY_CREATE = "property_create"
     PROPERTY_UPDATE = "property_update"
     PROPERTY_DELETE = "property_delete"
+    RESERVATION_CREATE = "reservation_create"
+    RESERVATION_UPDATE = "reservation_update"
+    RESERVATION_DELETE = "reservation_delete"
 
 
 class MessageFactory:
@@ -33,6 +36,14 @@ class MessageFactory:
         elif message_type in [MessageType.PROPERTY_CREATE, MessageType.PROPERTY_UPDATE]:
             return BaseMessage(message_type, prop.model_dump())
         raise ValueError("Invalid MessageType for Property")
+    
+    @staticmethod
+    def create_reservation_message(message_type: MessageType, reservation: BaseModel) -> BaseMessage:
+        if message_type == MessageType.RESERVATION_DELETE:
+            return BaseMessage(message_type, reservation.model_dump(include={'id'}))
+        elif message_type in [MessageType.RESERVATION_CREATE, MessageType.RESERVATION_UPDATE]:
+            return BaseMessage(message_type, reservation.model_dump())
+        raise ValueError("Invalid MessageType for Reservation")
 
 
 def to_json(message: BaseMessage) -> str:
