@@ -43,7 +43,7 @@ WRAPPER_TO_APP_QUEUE = "wrapper_events"
 WRAPPER_TO_APP_ROUTING_KEY = "wrapper_events"
 wrapper_events = channel.queue_declare(queue=WRAPPER_TO_APP_QUEUE, durable=True)
 channel.queue_bind(
-    queue=wrapper_events, exchange=EXCHANGE_NAME, routing_key=WRAPPER_TO_APP_ROUTING_KEY
+    queue=wrapper_events.method.queue, exchange=EXCHANGE_NAME, routing_key=WRAPPER_TO_APP_ROUTING_KEY
 )
 
 
