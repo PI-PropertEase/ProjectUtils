@@ -51,6 +51,11 @@ class MessageFactory:
             return BaseMessage(message_type, reservation.model_dump())
         raise ValueError("Invalid MessageType for Reservation")
 
+    @staticmethod
+    def create_import_properties_message(user: BaseModel):
+        return BaseMessage(MessageType.PROPERTY_IMPORT, user.model_dump(include={"email"}))
+
+
 
 def to_json(message: BaseMessage) -> str:
     return json.dumps(
