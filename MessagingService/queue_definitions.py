@@ -24,7 +24,7 @@ import pika
 #
 #
 
-connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
+connection = pika.BlockingConnection(pika.ConnectionParameters("rabbit_mq"))
 
 channel = connection.channel()
 EXCHANGE_NAME = "propertease.topic"
