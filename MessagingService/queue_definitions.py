@@ -49,6 +49,7 @@ channel.queue_bind(
 WRAPPER_BROADCAST_ROUTING_KEY = "wrappers.all"
 WRAPPER_ZOOKING_ROUTING_KEY = "wrappers.zooking"
 WRAPPER_CLICKANDGO_ROUTING_KEY = "wrappers.clickandgo"
+WRAPPER_EARTHSTAYIN_ROUTING_KEY = "wrappers.earthstayin"
 
 WRAPPER_TO_CALENDAR_QUEUE = "wrapper_events_calendar"
 WRAPPER_TO_CALENDAR_ROUTING_KEY = "wrapper_events_calendar"
