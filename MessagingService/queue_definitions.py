@@ -50,3 +50,4 @@ channel.queue_bind(
 # publish to this routing key if you want all wrappers to receive it
 WRAPPER_BROADCAST_ROUTING_KEY = "wrappers.all"
 WRAPPER_ZOOKING_ROUTING_KEY = "wrappers.zooking"
+WRAPPER_CLICKANDGO_ROUTING_KEY = "wrappers.clickandgo"
