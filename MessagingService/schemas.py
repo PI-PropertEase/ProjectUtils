@@ -3,6 +3,7 @@ from enum import StrEnum
 from time import time
 from pydantic import BaseModel
 from typing import Union, Dict, List
+from aio_pika import Message
 
 
 class BaseMessage:
@@ -17,6 +18,7 @@ class MessageType(StrEnum):
     USER_DELETE = "user_delete"
     PROPERTY_IMPORT = "property_import"
     PROPERTY_IMPORT_RESPONSE = "property_import_response"
+    PROPERTY_IMPORT_DUPLICATE = "property_import_duplicate"
     PROPERTY_CREATE = "property_create"
     PROPERTY_UPDATE = "property_update"
     PROPERTY_DELETE = "property_delete"
@@ -29,7 +31,7 @@ class MessageFactory:
     @staticmethod
     def create_user_message(message_type: MessageType, user: BaseModel) -> BaseMessage:
         if message_type not in [
-            MessageType.USER_CREATE, 
+            MessageType.USER_CREATE,
             MessageType.USER_DELETE
         ]:
             raise ValueError("Invalid MessageType for User")
@@ -40,7 +42,7 @@ class MessageFactory:
         if message_type == MessageType.PROPERTY_DELETE:
             return BaseMessage(message_type, prop.model_dump(include={"id"}))
         elif message_type in [
-            MessageType.PROPERTY_CREATE, 
+            MessageType.PROPERTY_CREATE,
             MessageType.PROPERTY_UPDATE
         ]:
             return BaseMessage(message_type, prop.model_dump())
@@ -60,7 +62,11 @@ class MessageFactory:
     @staticmethod
     def create_import_properties_message(user: BaseModel):
         return BaseMessage(MessageType.PROPERTY_IMPORT, user.model_dump(include={"email"}))
-    
+
+    @staticmethod
+    def create_duplicate_import_property_message(prop: dict):
+        return BaseMessage(MessageType.PROPERTY_IMPORT_DUPLICATE, prop["_id"])
+
     @staticmethod
     def create_import_properties_response_message(properties: list):
         return BaseMessage(MessageType.PROPERTY_IMPORT_RESPONSE, properties)
@@ -76,3 +82,8 @@ def to_json(message: BaseMessage) -> str:
 def from_json(json_str: str) -> BaseMessage:
     message = json.loads(json_str)
     return BaseMessage(message["type"], message["body"], message["ts"])
+
+def to_json_aoi_bytes(message: BaseMessage) -> bytes:
+    return Message(body=json.dumps(
+        {"type": message.message_type, "ts": time(), "body": message.body}
+    ).encode())
