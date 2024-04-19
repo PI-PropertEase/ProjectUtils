@@ -64,13 +64,15 @@ class MessageFactory:
         return BaseMessage(MessageType.PROPERTY_IMPORT, user.model_dump(include={"email"}))
 
     @staticmethod
-    def create_duplicate_import_property_message(prop: dict):
-        return BaseMessage(MessageType.PROPERTY_IMPORT_DUPLICATE, prop["_id"])
+    def create_duplicate_import_property_message(ex_prop: dict, ps_prop: dict):
+        return BaseMessage(MessageType.PROPERTY_IMPORT_DUPLICATE, {
+            "old_internal_id": ex_prop["_id"],
+            "new_internal_id": ps_prop["_id"]
+        })
 
     @staticmethod
     def create_import_properties_response_message(properties: list):
         return BaseMessage(MessageType.PROPERTY_IMPORT_RESPONSE, properties)
-
 
 
 def to_json(message: BaseMessage) -> str:
@@ -83,7 +85,8 @@ def from_json(json_str: str) -> BaseMessage:
     message = json.loads(json_str)
     return BaseMessage(message["type"], message["body"], message["ts"])
 
-def to_json_aoi_bytes(message: BaseMessage) -> bytes:
+
+def to_json_aoi_bytes(message: BaseMessage) -> Message:
     return Message(body=json.dumps(
         {"type": message.message_type, "ts": time(), "body": message.body}
     ).encode())
