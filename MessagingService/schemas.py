@@ -1,9 +1,15 @@
 import json
-from enum import StrEnum
+from enum import StrEnum, Enum
 from time import time
 from pydantic import BaseModel
 from typing import Union, Dict, List
 from aio_pika import Message
+
+
+class Service(Enum):
+    ZOOKING = "zooking"
+    CLICKANDGO = "clickandgo"
+    EARTHSTAYIN = "earthstayin"
 
 
 class BaseMessage:
