@@ -1,6 +1,8 @@
 import json
 import pika
 
+from ProjectUtils.MessagingService.schemas import Service
+
 # 1 unica Topic Exchange, que dá para endereçar só para 1 queue ou para muitas (e todas)
 #
 #       - QUEUE "users" - ligação UserService -> PropertyService, para quando é criado um user
@@ -57,3 +59,10 @@ wrapper_events = channel.queue_declare(queue=WRAPPER_TO_CALENDAR_QUEUE, durable=
 channel.queue_bind(
     queue=wrapper_events.method.queue, exchange=EXCHANGE_NAME, routing_key=WRAPPER_TO_CALENDAR_ROUTING_KEY
 )
+
+# Routing key by service
+routing_key_by_service = {
+    Service.ZOOKING: WRAPPER_ZOOKING_ROUTING_KEY,
+    Service.CLICKANDGO: WRAPPER_CLICKANDGO_ROUTING_KEY,
+    Service.EARTHSTAYIN: WRAPPER_EARTHSTAYIN_ROUTING_KEY
+}
