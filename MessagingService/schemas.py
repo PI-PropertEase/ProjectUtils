@@ -72,7 +72,6 @@ class MessageFactory:
     @staticmethod
     def create_duplicate_import_property_message(service: Service, ex_prop: dict, ps_prop: dict):
         return BaseMessage(MessageType.PROPERTY_IMPORT_DUPLICATE, {
-            "service": service,
             "old_internal_id": ex_prop["_id"],
             "new_internal_id": ps_prop["_id"]
         })
