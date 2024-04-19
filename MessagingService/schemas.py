@@ -47,12 +47,16 @@ class MessageFactory:
     def create_property(message_type: MessageType, prop: BaseModel) -> BaseMessage:
         if message_type == MessageType.PROPERTY_DELETE:
             return BaseMessage(message_type, prop.model_dump(include={"id"}))
-        elif message_type in [
-            MessageType.PROPERTY_CREATE,
-            MessageType.PROPERTY_UPDATE
-        ]:
+        elif message_type == MessageType.PROPERTY_CREATE:
             return BaseMessage(message_type, prop.model_dump())
         raise ValueError("Invalid MessageType for Property")
+
+    @staticmethod
+    def create_property_update_message(internal_id: int, prop: dict) -> BaseMessage:
+        return BaseMessage(MessageType.PROPERTY_UPDATE, {
+            "internal_id": internal_id,
+            "update_parameters": prop
+        })
 
     @staticmethod
     def create_reservation_message(message_type: MessageType, reservation: BaseModel) -> BaseMessage:
