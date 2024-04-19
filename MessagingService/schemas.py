@@ -13,7 +13,7 @@ class Service(Enum):
 
 
 class BaseMessage:
-    def __init__(self, message_type: str, body: Union[Dict, List], ts: float = None):
+    def __init__(self, message_type: str, body: dict, ts: float = None):
         self.message_type = message_type
         self.body = body
         self.ts = ts if ts is not None else time()
@@ -66,10 +66,8 @@ class MessageFactory:
         raise ValueError("Invalid MessageType for Reservation")
 
     @staticmethod
-    def create_import_properties_message(service: Service, user: BaseModel):
-        user_model_dump = user.model_dump(include={"email"})
-        user_model_dump["service"] = service
-        return BaseMessage(MessageType.PROPERTY_IMPORT, user_model_dump)
+    def create_import_properties_message(user: BaseModel):
+        return BaseMessage(MessageType.PROPERTY_IMPORT, user.model_dump(include={"email"}))
 
     @staticmethod
     def create_duplicate_import_property_message(service: Service, ex_prop: dict, ps_prop: dict):
@@ -80,8 +78,12 @@ class MessageFactory:
         })
 
     @staticmethod
-    def create_import_properties_response_message(properties: list):
-        return BaseMessage(MessageType.PROPERTY_IMPORT_RESPONSE, properties)
+    def create_import_properties_response_message(service: Service, properties: list):
+        body = {
+            "service": service,
+            "properties": properties
+        }
+        return BaseMessage(MessageType.PROPERTY_IMPORT_RESPONSE, body)
 
 
 def to_json(message: BaseMessage) -> str:
