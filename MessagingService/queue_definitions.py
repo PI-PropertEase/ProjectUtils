@@ -48,6 +48,8 @@ channel.queue_bind(
 # publish to this routing key if you want all wrappers to receive it
 WRAPPER_BROADCAST_ROUTING_KEY = "wrappers.all"
 WRAPPER_ZOOKING_ROUTING_KEY = "wrappers.zooking"
+WRAPPER_CLICKANDGO_ROUTING_KEY = "wrappers.clickandgo"
+WRAPPER_EARTHSTAYIN_ROUTING_KEY = "wrappers.earthstayin"
 
 WRAPPER_TO_CALENDAR_QUEUE = "wrapper_events_calendar"
 WRAPPER_TO_CALENDAR_ROUTING_KEY = "wrapper_events_calendar"
@@ -55,5 +57,3 @@ wrapper_events = channel.queue_declare(queue=WRAPPER_TO_CALENDAR_QUEUE, durable=
 channel.queue_bind(
     queue=wrapper_events.method.queue, exchange=EXCHANGE_NAME, routing_key=WRAPPER_TO_CALENDAR_ROUTING_KEY
 )
-
-
