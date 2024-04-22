@@ -31,6 +31,7 @@ class MessageType(StrEnum):
     RESERVATION_CREATE = "reservation_create"
     RESERVATION_UPDATE = "reservation_update"
     RESERVATION_DELETE = "reservation_delete"
+    RESERVATION_IMPORT = "reservation_import"
 
 
 class MessageFactory:
@@ -45,6 +46,7 @@ class MessageFactory:
 
     @staticmethod
     def create_property(message_type: MessageType, prop: BaseModel) -> BaseMessage:
+        # TODO change this function name
         if message_type == MessageType.PROPERTY_DELETE:
             return BaseMessage(message_type, prop.model_dump(include={"id"}))
         elif message_type == MessageType.PROPERTY_CREATE:
@@ -87,6 +89,11 @@ class MessageFactory:
             "properties": properties
         }
         return BaseMessage(MessageType.PROPERTY_IMPORT_RESPONSE, body)
+
+    @staticmethod
+    def create_import_reservations_message(reservations: list):
+        # TODO change import names in message type
+        return BaseMessage(MessageType.RESERVATION_IMPORT, reservations)
 
 
 def to_json(message: BaseMessage) -> str:
