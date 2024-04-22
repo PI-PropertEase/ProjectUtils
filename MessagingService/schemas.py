@@ -20,18 +20,24 @@ class BaseMessage:
 
 
 class MessageType(StrEnum):
+    # Messages triggered by user
     USER_CREATE = "user_create"
     USER_DELETE = "user_delete"
-    PROPERTY_IMPORT = "property_import"
-    PROPERTY_IMPORT_RESPONSE = "property_import_response"
-    PROPERTY_IMPORT_DUPLICATE = "property_import_duplicate"
     PROPERTY_CREATE = "property_create"
     PROPERTY_UPDATE = "property_update"
     PROPERTY_DELETE = "property_delete"
     RESERVATION_CREATE = "reservation_create"
     RESERVATION_UPDATE = "reservation_update"
     RESERVATION_DELETE = "reservation_delete"
+    # UserService request imports from wrappers
+    PROPERTY_IMPORT = "property_import"
     RESERVATION_IMPORT = "reservation_import"
+    # Responses from PropertyService to the request
+    PROPERTY_IMPORT_RESPONSE = "property_import_response"
+    PROPERTY_IMPORT_DUPLICATE = "property_import_duplicate"
+    # Responses from CalendarService to the request
+    RESERVATION_IMPORT_RESPONSE = "reservation_import_response"
+    RESERVATION_IMPORT_DUPLICATE = "reservation_import_duplicate"
 
 
 class MessageFactory:
@@ -91,9 +97,13 @@ class MessageFactory:
         return BaseMessage(MessageType.PROPERTY_IMPORT_RESPONSE, body)
 
     @staticmethod
-    def create_import_reservations_message(reservations: list):
+    def create_import_reservations_response_message(service: Service, reservations: list):
         # TODO change import names in message type
-        return BaseMessage(MessageType.RESERVATION_IMPORT, reservations)
+        body = {
+            "service": service.value,
+            "reservations": reservations
+        }
+        return BaseMessage(MessageType.RESERVATION_IMPORT, body)
 
 
 def to_json(message: BaseMessage) -> str:
