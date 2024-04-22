@@ -105,6 +105,13 @@ class MessageFactory:
         }
         return BaseMessage(MessageType.RESERVATION_IMPORT, body)
 
+    @staticmethod
+    def create_duplicate_import_reservation_message(ex_reservation: dict, ps_reservation: dict):
+        return BaseMessage(MessageType.PROPERTY_IMPORT_DUPLICATE, {
+            "old_internal_id": ex_reservation["_id"],
+            "new_internal_id": ps_reservation["_id"]
+        })
+
 
 def to_json(message: BaseMessage) -> str:
     return json.dumps(
