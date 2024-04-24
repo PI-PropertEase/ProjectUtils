@@ -38,6 +38,11 @@ class MessageType(StrEnum):
     # Responses from CalendarService to the request
     RESERVATION_IMPORT_RESPONSE = "reservation_import_response"
     RESERVATION_IMPORT_DUPLICATE = "reservation_import_duplicate"
+    # AnalyticsService to PropertyService
+    GET_ALL_PROPERTIES = "get_all_properties"
+    RECOMMENDED_PRICE = "recommended_price"
+    # PropertyService to AnalyticsService
+    GET_ALL_PROPERTIES_RESPONSE = "get_all_properties_response"
 
 
 class MessageFactory:
@@ -112,6 +117,17 @@ class MessageFactory:
             "new_internal_id": ps_reservation["_id"]
         })
 
+    @staticmethod
+    def create_get_all_properties_message():
+        return BaseMessage(MessageType.GET_ALL_PROPERTIES, {})
+    
+    @staticmethod
+    def create_get_all_properties_response_message(properties: list):
+        return BaseMessage(MessageType.GET_ALL_PROPERTIES_RESPONSE, properties)
+
+    @staticmethod
+    def create_recommended_price_message(property: dict):
+        return BaseMessage(MessageType.RECOMMENDED_PRICE, property)
 
 def to_json(message: BaseMessage) -> str:
     return json.dumps(
