@@ -26,7 +26,8 @@ from ProjectUtils.MessagingService.schemas import Service
 #
 #
 
-connection = pika.BlockingConnection(pika.ConnectionParameters("rabbit_mq"))
+#connection = pika.BlockingConnection(pika.ConnectionParameters("rabbit_mq"))
+connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
 
 channel = connection.channel()
 EXCHANGE_NAME = "propertease.topic"
@@ -71,7 +72,7 @@ PROPERTY_TO_ANALYTICS_QUEUE_NAME = "property_analytics"
 PROPERTY_TO_ANALYTICS_QUEUE_ROUTING_KEY = "property_analytics"
 property_to_analytics = channel.queue_declare(queue=PROPERTY_TO_ANALYTICS_QUEUE_NAME, durable=True)
 channel.queue_bind(
-    queue=created_users.method.queue,
+    queue=property_to_analytics.method.queue,
     exchange=EXCHANGE_NAME,
     routing_key=PROPERTY_TO_ANALYTICS_QUEUE_ROUTING_KEY,
 )
@@ -80,7 +81,7 @@ ANALYTICS_TO_PROPERTY_QUEUE_NAME = "analytics_property"
 ANALYTICS_TO_PROPERTY_QUEUE_ROUTING_KEY = "analytics_property"
 analytics_to_property = channel.queue_declare(queue=ANALYTICS_TO_PROPERTY_QUEUE_NAME, durable=True)
 channel.queue_bind(
-    queue=created_users.method.queue,
+    queue=analytics_to_property.method.queue,
     exchange=EXCHANGE_NAME,
     routing_key=ANALYTICS_TO_PROPERTY_QUEUE_ROUTING_KEY,
 )
