@@ -31,6 +31,8 @@ class MessageType(StrEnum):
     RESERVATION_DELETE = "reservation_delete"
     # UserService request imports from wrappers
     PROPERTY_IMPORT = "property_import"
+    RESERVATION_IMPORT_REQUEST = "reservation_import_request"
+    # Refactor all this names later
     RESERVATION_IMPORT = "reservation_import"
     # Responses from PropertyService to the request
     PROPERTY_IMPORT_RESPONSE = "property_import_response"
@@ -85,6 +87,13 @@ class MessageFactory:
     @staticmethod
     def create_import_properties_message(user: BaseModel):
         return BaseMessage(MessageType.PROPERTY_IMPORT, user.model_dump(include={"email"}))
+
+    @staticmethod
+    def create_import_reservations_message(users: list[BaseModel]):
+        return BaseMessage(
+            MessageType.RESERVATION_IMPORT_REQUEST,
+            {"users": user.model_dump(include={"email"}) for user in users}
+        )
 
     @staticmethod
     def create_duplicate_import_property_message(ex_prop: dict, ps_prop: dict):
