@@ -38,11 +38,10 @@ class MessageType(StrEnum):
     # Responses from CalendarService to the request
     RESERVATION_IMPORT_RESPONSE = "reservation_import_response"
     RESERVATION_IMPORT_OVERLAP = "reservation_import_overlap"
-    # AnalyticsService to PropertyService
-    GET_ALL_PROPERTIES = "get_all_properties"
-    RECOMMENDED_PRICE = "recommended_price"
     # PropertyService to AnalyticsService
-    GET_ALL_PROPERTIES_RESPONSE = "get_all_properties_response"
+    GET_RECOMMENDED_PRICE = "get_recommended_price"
+    # AnalyticsService to PropertyService
+    RECOMMENDED_PRICE_RESPONSE = "recommended_price_response"
 
 
 class MessageFactory:
@@ -115,18 +114,14 @@ class MessageFactory:
         return BaseMessage(MessageType.RESERVATION_IMPORT_OVERLAP, {
             "old_internal_id": ex_reservation["_id"]
         })
-
-    @staticmethod
-    def create_get_all_properties_message():
-        return BaseMessage(MessageType.GET_ALL_PROPERTIES, {})
     
     @staticmethod
-    def create_get_all_properties_response_message(properties: list):
-        return BaseMessage(MessageType.GET_ALL_PROPERTIES_RESPONSE, properties)
+    def create_get_recommended_price(properties: list):
+        return BaseMessage(MessageType.GET_RECOMMENDED_PRICE, properties)
 
     @staticmethod
-    def create_recommended_price_message(property: dict):
-        return BaseMessage(MessageType.RECOMMENDED_PRICE, property)
+    def create_recommended_price_response_message(property: dict):
+        return BaseMessage(MessageType.RECOMMENDED_PRICE_RESPONSE, property)
 
 def to_json(message: BaseMessage) -> str:
     return json.dumps(
