@@ -89,10 +89,10 @@ class MessageFactory:
         return BaseMessage(MessageType.PROPERTY_IMPORT, user.model_dump(include={"email"}))
 
     @staticmethod
-    def create_import_reservations_message(users: list[BaseModel]):
+    def create_import_reservations_message(users):
         return BaseMessage(
             MessageType.RESERVATION_IMPORT_REQUEST,
-            {"users": [user.model_dump(include={"email"}) for user in users]}
+            {"users_with_services": { user.email: [service.value for service in user.connected_services] for user in users}}
         )
 
     @staticmethod
