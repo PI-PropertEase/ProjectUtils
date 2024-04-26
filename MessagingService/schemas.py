@@ -123,6 +123,12 @@ class MessageFactory:
         return BaseMessage(MessageType.RESERVATION_IMPORT_OVERLAP, {
             "old_internal_id": ex_reservation["_id"]
         })
+
+    @staticmethod
+    def create_confirm_reservation_message(ex_reservation: dict):
+        return BaseMessage(MessageType.RESERVATION_IMPORT_OVERLAP, {
+            "internal_id": ex_reservation["_id"]
+        })
     
     @staticmethod
     def create_get_recommended_price(properties: list):
