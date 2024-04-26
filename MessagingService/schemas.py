@@ -127,7 +127,7 @@ class MessageFactory:
 
     @staticmethod
     def create_confirm_reservation_message(ex_reservation: dict):
-        return BaseMessage(MessageType.RESERVATION_, {
+        return BaseMessage(MessageType.RESERVATION_IMPORT_CONFIRM, {
             "internal_id": ex_reservation["_id"]
         })
     
