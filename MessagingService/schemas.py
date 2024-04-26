@@ -38,6 +38,7 @@ class MessageType(StrEnum):
     PROPERTY_IMPORT_RESPONSE = "property_import_response"
     PROPERTY_IMPORT_DUPLICATE = "property_import_duplicate"
     # Responses from CalendarService to the request
+    RESERVATION_IMPORT_CONFIRM = "reservation_import_confirm"
     RESERVATION_IMPORT_RESPONSE = "reservation_import_response"
     RESERVATION_IMPORT_OVERLAP = "reservation_import_overlap"
     # PropertyService to AnalyticsService
@@ -126,7 +127,7 @@ class MessageFactory:
 
     @staticmethod
     def create_confirm_reservation_message(ex_reservation: dict):
-        return BaseMessage(MessageType.RESERVATION_IMPORT_OVERLAP, {
+        return BaseMessage(MessageType.RESERVATION_, {
             "internal_id": ex_reservation["_id"]
         })
     
