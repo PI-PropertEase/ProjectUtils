@@ -129,8 +129,8 @@ class MessageFactory:
         return BaseMessage(MessageType.GET_RECOMMENDED_PRICE, properties)
 
     @staticmethod
-    def create_recommended_price_response_message(median: dict):
-        return BaseMessage(MessageType.RECOMMENDED_PRICE_RESPONSE, median)
+    def create_recommended_price_response_message(recommended_prices: dict):
+        return BaseMessage(MessageType.RECOMMENDED_PRICE_RESPONSE, recommended_prices)
 
 def to_json(message: BaseMessage) -> str:
     return json.dumps(
