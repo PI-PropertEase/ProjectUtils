@@ -29,11 +29,11 @@ class MessageType(StrEnum):
     RESERVATION_CREATE = "reservation_create"
     RESERVATION_UPDATE = "reservation_update"
     RESERVATION_DELETE = "reservation_delete"
-    # UserService request imports from wrappers
+    # UserService request property import from wrappers
     PROPERTY_IMPORT = "property_import"
     RESERVATION_IMPORT_REQUEST = "reservation_import_request"
-    # Refactor all this names later
-    RESERVATION_IMPORT = "reservation_import"
+    # PropertyService requests reservation import from wrappers sending new id if it's a duplicated property
+    RESERVATION_IMPORT_INITIAL_REQUEST = "reservation_import_initial_request"
     # Responses from PropertyService to the request
     PROPERTY_IMPORT_RESPONSE = "property_import_response"
     PROPERTY_IMPORT_DUPLICATE = "property_import_duplicate"
@@ -96,10 +96,10 @@ class MessageFactory:
         )
 
     @staticmethod
-    def create_duplicate_import_property_message(ex_prop: dict, ps_prop: dict):
+    def create_reservation_import_initial_request_message(old_internal_id: int, new_internal_id: int):
         return BaseMessage(MessageType.PROPERTY_IMPORT_DUPLICATE, {
-            "old_internal_id": ex_prop["_id"],
-            "new_internal_id": ps_prop["_id"]
+            "old_internal_id": old_internal_id,
+            "new_internal_id": new_internal_id
         })
 
     @staticmethod
