@@ -97,7 +97,7 @@ class MessageFactory:
 
     @staticmethod
     def create_reservation_import_initial_request_message(old_internal_id: int, new_internal_id: int):
-        return BaseMessage(MessageType.PROPERTY_IMPORT_DUPLICATE, {
+        return BaseMessage(MessageType.RESERVATION_IMPORT_INITIAL_REQUEST, {
             "old_internal_id": old_internal_id,
             "new_internal_id": new_internal_id
         })
