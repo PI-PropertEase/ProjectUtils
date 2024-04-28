@@ -96,11 +96,10 @@ class MessageFactory:
         )
 
     @staticmethod
-    def create_reservation_import_initial_request_message(email: str, old_internal_id: int, new_internal_id: int):
+    def create_reservation_import_initial_request_message(email: str, old_new_id_map: dict[int, int]):
         return BaseMessage(MessageType.RESERVATION_IMPORT_INITIAL_REQUEST, {
             "email": email,
-            "old_internal_id": old_internal_id,
-            "new_internal_id": new_internal_id
+            "old_new_id_map": old_new_id_map,
         })
 
     @staticmethod
