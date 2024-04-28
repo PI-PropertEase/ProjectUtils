@@ -41,6 +41,8 @@ class MessageType(StrEnum):
     RESERVATION_IMPORT_CONFIRM = "reservation_import_confirm"
     RESERVATION_IMPORT_RESPONSE = "reservation_import_response"
     RESERVATION_IMPORT_OVERLAP = "reservation_import_overlap"
+    # Responses from wrappers to the request
+    RESERVATION_IMPORT = "reservation_import"
     # PropertyService to AnalyticsService
     GET_RECOMMENDED_PRICE = "get_recommended_price"
     # AnalyticsService to PropertyService
