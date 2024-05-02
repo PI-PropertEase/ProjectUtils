@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from enum import StrEnum, Enum
 from time import time
 from pydantic import BaseModel
@@ -34,6 +35,8 @@ class MessageType(StrEnum):
     RESERVATION_IMPORT_REQUEST = "reservation_import_request"
     # PropertyService requests reservation import from wrappers sending new id if it's a duplicated property
     RESERVATION_IMPORT_INITIAL_REQUEST = "reservation_import_initial_request"
+    # CalendarService sends event propagation after management event creation or after reservation importation
+    EVENT_PROPAGATION = "event_propagation"
     # Responses from PropertyService to the request
     PROPERTY_IMPORT_RESPONSE = "property_import_response"
     PROPERTY_IMPORT_DUPLICATE = "property_import_duplicate"
@@ -140,6 +143,14 @@ class MessageFactory:
     @staticmethod
     def create_recommended_price_response_message(recommended_prices: dict):
         return BaseMessage(MessageType.RECOMMENDED_PRICE_RESPONSE, recommended_prices)
+
+    @staticmethod
+    def create_event_propagation_message(event_internal_id: int, begin_datetime: datetime, end_datetime: datetime):
+        return BaseMessage(MessageType.EVENT_PROPAGATION, {
+            "internal_id": event_internal_id,
+            "begin_datetime": begin_datetime,
+            "end_datetime": end_datetime,
+        })
 
 def to_json(message: BaseMessage) -> str:
     return json.dumps(
