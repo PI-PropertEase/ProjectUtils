@@ -98,7 +98,8 @@ class MessageFactory:
     def create_import_reservations_message(users):
         return BaseMessage(
             MessageType.RESERVATION_IMPORT_REQUEST,
-            {"users_with_services": { user.email: [service.value for service in user.connected_services] for user in users}}
+            {"users_with_services": {user.email: [service.value for service in user.connected_services] for user in
+                                     users}}
         )
 
     @staticmethod
@@ -136,7 +137,7 @@ class MessageFactory:
         return BaseMessage(MessageType.RESERVATION_IMPORT_CONFIRM, {
             "internal_id": ex_reservation["_id"]
         })
-    
+
     @staticmethod
     def create_get_recommended_price(properties: list):
         return BaseMessage(MessageType.GET_RECOMMENDED_PRICE, properties)
@@ -146,7 +147,7 @@ class MessageFactory:
         return BaseMessage(MessageType.RECOMMENDED_PRICE_RESPONSE, recommended_prices)
 
     @staticmethod
-    def create_event_propagation_message(
+    def create_management_event_propagation_message(
             property_internal_id: int, event_internal_id: int, begin_datetime: datetime, end_datetime: datetime
     ):
         return BaseMessage(MessageType.MANAGEMENT_EVENT_PROPAGATION, {
@@ -155,6 +156,7 @@ class MessageFactory:
             "begin_datetime": begin_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
             "end_datetime": end_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
         })
+
 
 def to_json(message: BaseMessage) -> str:
     return json.dumps(
