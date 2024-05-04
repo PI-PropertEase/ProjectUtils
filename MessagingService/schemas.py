@@ -30,14 +30,14 @@ class MessageType(StrEnum):
     RESERVATION_CREATE = "reservation_create"
     RESERVATION_UPDATE = "reservation_update"
     RESERVATION_DELETE = "reservation_delete"
+    MANAGEMENT_EVENT_CREATE = "management_event_create"
+    MANAGEMENT_EVENT_UPDATE = "management_event_update"
+    MANAGEMENT_EVENT_DELETE = "management_event_delete"
     # UserService request property import from wrappers
     PROPERTY_IMPORT = "property_import"
     RESERVATION_IMPORT_REQUEST = "reservation_import_request"
     # PropertyService requests reservation import from wrappers sending new id if it's a duplicated property
     RESERVATION_IMPORT_INITIAL_REQUEST = "reservation_import_initial_request"
-    # CalendarService sends event propagation after management event creation or after reservation importation
-    MANAGEMENT_EVENT_PROPAGATION = "event_propagation"
-    RESERVATION_PROPAGATION = "reservation_propagation"
     # Responses from PropertyService to the request
     PROPERTY_IMPORT_RESPONSE = "property_import_response"
     PROPERTY_IMPORT_DUPLICATE = "property_import_duplicate"
@@ -147,15 +147,25 @@ class MessageFactory:
         return BaseMessage(MessageType.RECOMMENDED_PRICE_RESPONSE, recommended_prices)
 
     @staticmethod
-    def create_management_event_propagation_message(
-            property_internal_id: int, event_internal_id: int, begin_datetime: datetime, end_datetime: datetime
+    def create_management_event_message(
+            message_type: MessageType, property_internal_id: int, event_internal_id: int, begin_datetime: datetime, end_datetime: datetime
     ):
-        return BaseMessage(MessageType.MANAGEMENT_EVENT_PROPAGATION, {
-            "property_internal_id": property_internal_id,
-            "event_internal_id": event_internal_id,
-            "begin_datetime": begin_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
-            "end_datetime": end_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
-        })
+        if message_type in [MessageType.MANAGEMENT_EVENT_CREATE, MessageType.MANAGEMENT_EVENT_UPDATE]:
+            message_body = {
+                "property_internal_id": property_internal_id,
+                "event_internal_id": event_internal_id,
+                "begin_datetime": begin_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
+                "end_datetime": end_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
+            }
+        elif message_type == MessageType.MANAGEMENT_EVENT_DELETE:
+            message_body = {
+                "property_internal_id": property_internal_id,
+                "event_internal_id": event_internal_id
+            }
+        else:
+            raise ValueError("Invalid MessageType for Management Event Message")
+
+        return BaseMessage(message_type, message_body)
 
 
 def to_json(message: BaseMessage) -> str:
