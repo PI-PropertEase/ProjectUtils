@@ -147,25 +147,29 @@ class MessageFactory:
         return BaseMessage(MessageType.RECOMMENDED_PRICE_RESPONSE, recommended_prices)
 
     @staticmethod
-    def create_management_event_message(
-            message_type: MessageType, property_internal_id: int, event_internal_id: int, begin_datetime: datetime, end_datetime: datetime
+    def create_management_event_creation_update_message(
+            message_type: MessageType, property_internal_id: int, event_internal_id: int, begin_datetime: datetime,
+            end_datetime: datetime
     ):
-        if message_type in [MessageType.MANAGEMENT_EVENT_CREATE, MessageType.MANAGEMENT_EVENT_UPDATE]:
-            message_body = {
-                "property_internal_id": property_internal_id,
-                "event_internal_id": event_internal_id,
-                "begin_datetime": begin_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
-                "end_datetime": end_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
-            }
-        elif message_type == MessageType.MANAGEMENT_EVENT_DELETE:
-            message_body = {
-                "property_internal_id": property_internal_id,
-                "event_internal_id": event_internal_id
-            }
-        else:
+        if message_type not in [MessageType.MANAGEMENT_EVENT_CREATE, MessageType.MANAGEMENT_EVENT_UPDATE]:
             raise ValueError("Invalid MessageType for Management Event Message")
 
-        return BaseMessage(message_type, message_body)
+        return BaseMessage(message_type, {
+            "property_internal_id": property_internal_id,
+            "event_internal_id": event_internal_id,
+            "begin_datetime": begin_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
+            "end_datetime": end_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
+        })
+
+    @staticmethod
+    def create_management_event_deletion_message(
+            property_internal_id: int, event_internal_id: int
+    ):
+        message_body = {
+            "property_internal_id": property_internal_id,
+            "event_internal_id": event_internal_id
+        }
+        return BaseMessage(MessageType.MANAGEMENT_EVENT_DELETE, message_body)
 
 
 def to_json(message: BaseMessage) -> str:
