@@ -84,3 +84,12 @@ channel.queue_bind(
     exchange=EXCHANGE_NAME,
     routing_key=ANALYTICS_TO_PROPERTY_QUEUE_ROUTING_KEY,
 )
+
+PROPERTY_TO_ANALYTICS_DATA_QUEUE_NAME = "property_analytics_data"
+PROPERTY_TO_ANALYTICS_DATA_ROUTING_KEY = "property_analytics_data"
+property_to_analytics_data = channel.queue_declare(queue=PROPERTY_TO_ANALYTICS_DATA_QUEUE_NAME, durable=True)
+channel.queue_bind(
+    queue=property_to_analytics_data.method.queue,
+    exchange=EXCHANGE_NAME,
+    routing_key=PROPERTY_TO_ANALYTICS_DATA_ROUTING_KEY,
+)
