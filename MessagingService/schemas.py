@@ -50,6 +50,7 @@ class MessageType(StrEnum):
     # AnalyticsService to PropertyService
     RECOMMENDED_PRICE_RESPONSE = "recommended_price_response"
     RESERVATION_CANCEL_MESSAGE = "reservation_cancel_message"
+    SCHEDULED_PROPERTY_IMPORT = "scheduled_property_import"
 
 
 class MessageFactory:
@@ -172,6 +173,14 @@ class MessageFactory:
             "event_internal_id": event_internal_id
         }
         return BaseMessage(MessageType.MANAGEMENT_EVENT_DELETE, message_body)
+    
+    @staticmethod
+    def create_scheduled_properties_import_message(users: list):
+        return BaseMessage(
+            MessageType.SCHEDULED_PROPERTY_IMPORT,
+            {"users_with_services": {user.email: [service.value for service in user.connected_services] for user in
+                                     users}}
+        )
 
 
 def to_json(message: BaseMessage) -> str:
