@@ -46,6 +46,7 @@ class MessageType(StrEnum):
     RESERVATION_IMPORT = "reservation_import"
     # PropertyService to AnalyticsService
     GET_RECOMMENDED_PRICE = "get_recommended_price"
+    SEND_DATA_TO_ANALYTICS = "send_data_to_analytics"
     # AnalyticsService to PropertyService
     RECOMMENDED_PRICE_RESPONSE = "recommended_price_response"
     RESERVATION_CANCEL_MESSAGE = "reservation_cancel_message"
@@ -142,6 +143,10 @@ class MessageFactory:
     @staticmethod
     def create_recommended_price_response_message(recommended_prices: dict):
         return BaseMessage(MessageType.RECOMMENDED_PRICE_RESPONSE, recommended_prices)
+    
+    @staticmethod
+    def create_send_data_to_analytics_message(properties: list):
+        return BaseMessage(MessageType.SEND_DATA_TO_ANALYTICS, properties)
 
     @staticmethod
     def create_management_event_creation_update_message(
