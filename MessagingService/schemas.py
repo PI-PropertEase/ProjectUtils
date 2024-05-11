@@ -27,9 +27,6 @@ class MessageType(StrEnum):
     PROPERTY_CREATE = "property_create"
     PROPERTY_UPDATE = "property_update"
     PROPERTY_DELETE = "property_delete"
-    RESERVATION_CREATE = "reservation_create"
-    RESERVATION_UPDATE = "reservation_update"
-    RESERVATION_DELETE = "reservation_delete"
     MANAGEMENT_EVENT_CREATE = "management_event_create"
     MANAGEMENT_EVENT_UPDATE = "management_event_update"
     MANAGEMENT_EVENT_DELETE = "management_event_delete"
@@ -51,6 +48,7 @@ class MessageType(StrEnum):
     GET_RECOMMENDED_PRICE = "get_recommended_price"
     # AnalyticsService to PropertyService
     RECOMMENDED_PRICE_RESPONSE = "recommended_price_response"
+    RESERVATION_CANCEL_MESSAGE = "reservation_cancel_message"
 
 
 class MessageFactory:
@@ -78,17 +76,6 @@ class MessageFactory:
             "internal_id": internal_id,
             "update_parameters": prop
         })
-
-    @staticmethod
-    def create_reservation_message(message_type: MessageType, reservation: BaseModel) -> BaseMessage:
-        if message_type == MessageType.RESERVATION_DELETE:
-            return BaseMessage(message_type, reservation.model_dump(include={"id"}))
-        elif message_type in [
-            MessageType.RESERVATION_CREATE,
-            MessageType.RESERVATION_UPDATE,
-        ]:
-            return BaseMessage(message_type, reservation.model_dump())
-        raise ValueError("Invalid MessageType for Reservation")
 
     @staticmethod
     def create_import_properties_message(user: BaseModel):
@@ -129,13 +116,23 @@ class MessageFactory:
     @staticmethod
     def create_overlap_import_reservation_message(ex_reservation: dict):
         return BaseMessage(MessageType.RESERVATION_IMPORT_OVERLAP, {
-            "old_internal_id": ex_reservation["_id"]
+            "old_reservation_internal_id": ex_reservation["_id"]
         })
 
     @staticmethod
     def create_confirm_reservation_message(ex_reservation: dict):
         return BaseMessage(MessageType.RESERVATION_IMPORT_CONFIRM, {
-            "internal_id": ex_reservation["_id"]
+            "reservation_internal_id": ex_reservation["_id"],
+            "property_internal_id": ex_reservation["property_id"],
+            "begin_datetime": ex_reservation["begin_datetime"],
+            "end_datetime": ex_reservation["end_datetime"],
+        })
+
+    @staticmethod
+    def create_cancel_reservation_message(ex_reservation: dict):
+        return BaseMessage(MessageType.RESERVATION_CANCEL_MESSAGE, {
+            "old_reservation_internal_id": ex_reservation["_id"],
+            "property_internal_id": ex_reservation["property_id"]
         })
 
     @staticmethod
