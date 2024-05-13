@@ -51,6 +51,7 @@ class MessageType(StrEnum):
     RECOMMENDED_PRICE_RESPONSE = "recommended_price_response"
     RESERVATION_CANCEL_MESSAGE = "reservation_cancel_message"
     SCHEDULED_PROPERTY_IMPORT = "scheduled_property_import"
+    RESERVATION_IMPORT_REQUEST_OTHER_SERVICES_CONFIRMED_RESERVATIONS = "reservation_import_request_other_services_confirmed_reservations"
 
 
 class MessageFactory:
@@ -180,6 +181,13 @@ class MessageFactory:
             MessageType.SCHEDULED_PROPERTY_IMPORT,
             {"users_with_services": {user.email: [service.value for service in user.connected_services] for user in
                                      users}}
+        )
+
+    @staticmethod
+    def create_reservation_import_request_other_services_confirmed_reservations_message(properties: list):
+        return BaseMessage(
+            MessageType.RESERVATION_IMPORT_REQUEST_OTHER_SERVICES_CONFIRMED_RESERVATIONS,
+            {"properties": properties}
         )
 
 
