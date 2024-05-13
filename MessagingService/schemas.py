@@ -184,10 +184,10 @@ class MessageFactory:
         )
 
     @staticmethod
-    def create_reservation_import_request_other_services_confirmed_reservations_message(properties: list):
+    def create_reservation_import_request_other_services_confirmed_reservations_message(properties_ids: list):
         return BaseMessage(
             MessageType.RESERVATION_IMPORT_REQUEST_OTHER_SERVICES_CONFIRMED_RESERVATIONS,
-            {"properties": properties}
+            {"properties_ids": properties_ids}
         )
 
 
