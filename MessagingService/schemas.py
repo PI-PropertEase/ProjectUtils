@@ -24,24 +24,22 @@ class MessageType(StrEnum):
     # Messages triggered by user
     USER_CREATE = "user_create"
     USER_DELETE = "user_delete"
-    PROPERTY_CREATE = "property_create"
     PROPERTY_UPDATE = "property_update"
-    PROPERTY_DELETE = "property_delete"
     MANAGEMENT_EVENT_CREATE = "management_event_create"
     MANAGEMENT_EVENT_UPDATE = "management_event_update"
     MANAGEMENT_EVENT_DELETE = "management_event_delete"
     # UserService request property import from wrappers
     PROPERTY_IMPORT = "property_import"
     RESERVATION_IMPORT_REQUEST = "reservation_import_request"
+    SCHEDULED_PROPERTY_IMPORT = "scheduled_property_import"
     # PropertyService requests reservation import from wrappers sending new id if it's a duplicated property
     RESERVATION_IMPORT_INITIAL_REQUEST = "reservation_import_initial_request"
     # Responses from PropertyService to the request
     PROPERTY_IMPORT_RESPONSE = "property_import_response"
-    PROPERTY_IMPORT_DUPLICATE = "property_import_duplicate"
     # Responses from CalendarService to the request
     RESERVATION_IMPORT_CONFIRM = "reservation_import_confirm"
-    RESERVATION_IMPORT_RESPONSE = "reservation_import_response"
     RESERVATION_IMPORT_OVERLAP = "reservation_import_overlap"
+    RESERVATION_CANCEL_MESSAGE = "reservation_cancel_message"
     # Responses from wrappers to the request
     RESERVATION_IMPORT = "reservation_import"
     # PropertyService to AnalyticsService
@@ -49,8 +47,7 @@ class MessageType(StrEnum):
     SEND_DATA_TO_ANALYTICS = "send_data_to_analytics"
     # AnalyticsService to PropertyService
     RECOMMENDED_PRICE_RESPONSE = "recommended_price_response"
-    RESERVATION_CANCEL_MESSAGE = "reservation_cancel_message"
-    SCHEDULED_PROPERTY_IMPORT = "scheduled_property_import"
+    # wrappers asking for existing reservations when importing new property
     RESERVATION_IMPORT_REQUEST_OTHER_SERVICES_CONFIRMED_RESERVATIONS = "reservation_import_request_other_services_confirmed_reservations"
     EMAIL_PROPERTY_ID_MAPPING = "mail_property_id_mapping"
 
@@ -64,15 +61,6 @@ class MessageFactory:
         ]:
             raise ValueError("Invalid MessageType for User")
         return BaseMessage(message_type, user.model_dump(include={"email"}))
-
-    @staticmethod
-    def create_property(message_type: MessageType, prop: BaseModel) -> BaseMessage:
-        # TODO change this function name
-        if message_type == MessageType.PROPERTY_DELETE:
-            return BaseMessage(message_type, prop.model_dump(include={"id"}))
-        elif message_type == MessageType.PROPERTY_CREATE:
-            return BaseMessage(message_type, prop.model_dump())
-        raise ValueError("Invalid MessageType for Property")
 
     @staticmethod
     def create_property_update_message(internal_id: int, prop: dict) -> BaseMessage:
@@ -110,7 +98,6 @@ class MessageFactory:
 
     @staticmethod
     def create_import_reservations_response_message(service: Service, reservations: list):
-        # TODO change import names in message type
         body = {
             "service": service.value,
             "reservations": reservations
