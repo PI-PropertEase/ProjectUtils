@@ -52,6 +52,7 @@ class MessageType(StrEnum):
     RESERVATION_CANCEL_MESSAGE = "reservation_cancel_message"
     SCHEDULED_PROPERTY_IMPORT = "scheduled_property_import"
     RESERVATION_IMPORT_REQUEST_OTHER_SERVICES_CONFIRMED_RESERVATIONS = "reservation_import_request_other_services_confirmed_reservations"
+    EMAIL_PROPERTY_ID_MAPPING = "mail_property_id_mapping"
 
 
 class MessageFactory:
@@ -191,6 +192,12 @@ class MessageFactory:
                 "service": service.value,
                 "properties_ids": properties_ids
             }
+        )
+
+    @staticmethod
+    def create_email_property_id_mapping_message(email: str, property_id: int):
+        return BaseMessage(
+            MessageType.EMAIL_PROPERTY_ID_MAPPING, {"email": email, "property_id": property_id}
         )
 
 

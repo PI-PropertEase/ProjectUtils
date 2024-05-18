@@ -93,3 +93,12 @@ channel.queue_bind(
     exchange=EXCHANGE_NAME,
     routing_key=PROPERTY_TO_ANALYTICS_DATA_ROUTING_KEY,
 )
+
+PROPERTY_TO_CALENDAR_QUEUE = "property_calendar"
+PROPERTY_TO_CALENDAR_ROUTING_KEY = "property_calendar"
+created_mail_properties = channel.queue_declare(queue=PROPERTY_TO_CALENDAR_QUEUE, durable=True)
+channel.queue_bind(
+    queue=created_mail_properties.method.queue,
+    exchange=EXCHANGE_NAME,
+    routing_key=PROPERTY_TO_CALENDAR_ROUTING_KEY,
+)
